@@ -3,43 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABHISHEK A K. | Electronics Engineer</title>
+<title>ABHISHEK A K. | AI & Electronics</title>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body{margin:0;overflow-x:hidden;background:#020617;color:white;font-family:sans-serif}
+body{margin:0;background:#01010a;color:white;font-family:sans-serif;overflow-x:hidden}
 
-.logo{font-weight:bold;background:linear-gradient(90deg,#00f5ff,#38bdf8,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo{font-weight:bold;background:linear-gradient(90deg,#00f5ff,#8b5cf6,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-/* Floating lights */
-.light{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.6;animation:float 10s infinite ease-in-out}
-.light1{width:300px;height:300px;background:#00f5ff;top:10%;left:10%}
-.light2{width:250px;height:250px;background:#6366f1;bottom:10%;right:10%;animation-delay:2s}
-.light3{width:200px;height:200px;background:#22c55e;top:50%;left:40%;animation-delay:4s}
+/* Neural network lines */
+canvas.bg{
+ position:fixed;
+ top:0;left:0;
+ z-index:-1;
+}
 
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-40px)}}
+/* Glass */
+.glass{
+ background:rgba(255,255,255,0.05);
+ backdrop-filter:blur(20px);
+ border:1px solid rgba(255,255,255,0.1);
+}
 
-/* Extra orbs */
-.orb{position:absolute;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#00f5ff,transparent);filter:blur(60px);opacity:0.4;animation:float 12s infinite}
+/* Glow */
+.glow{
+ box-shadow:0 0 20px #00f5ff;
+}
 
-.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+/* Button */
+.btn{
+ background:linear-gradient(90deg,#00f5ff,#8b5cf6);
+ padding:12px 24px;
+ border-radius:10px;
+}
 
-.btn{background:linear-gradient(90deg,#00f5ff,#6366f1);padding:12px 24px;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<!-- Canvas for cursor trail -->
-<canvas id="cursorCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
+<canvas id="bgCanvas" class="bg"></canvas>
 
-<!-- Lights -->
-<div class="light light1"></div>
-<div class="light light2"></div>
-<div class="light light3"></div>
-
-<!-- Navbar -->
-<header class="flex justify-between items-center p-6 glass fixed w-full">
+<header class="flex justify-between p-6 glass fixed w-full">
 <h1 class="logo">ABHISHEK A K.</h1>
 <nav class="space-x-6">
 <a href="#about">About</a>
@@ -48,46 +53,39 @@ body{margin:0;overflow-x:hidden;background:#020617;color:white;font-family:sans-
 </nav>
 </header>
 
-<!-- Hero -->
-<section class="h-screen flex flex-col justify-center items-center text-center px-4">
-<h2 id="typing" class="text-5xl md:text-6xl font-bold mb-6"></h2>
-<p class="text-gray-400">Electronics & Communication Engineering Student ⚡</p>
-<p class="text-gray-500 mt-2">Embedded Systems • Circuits • IoT • Web Tech</p>
+<section class="h-screen flex flex-col justify-center items-center text-center">
+<h2 id="typing" class="text-6xl font-bold"></h2>
+<p class="text-gray-400">AI • Electronics • Future Tech</p>
 <div class="mt-6">
-<a href="#projects" class="btn">View Projects</a>
+<a href="#projects" class="btn glow">Explore Projects</a>
 </div>
 </section>
 
-<!-- About -->
 <section id="about" class="px-10 py-24">
 <div class="glass p-8 rounded-xl max-w-3xl mx-auto">
 <h2 class="text-3xl mb-4">About Me</h2>
-<p class="text-gray-400">
-I am an Electronics and Communication Engineering student passionate about building intelligent systems and modern web interfaces.
-</p>
+<p class="text-gray-400">I am an Electronics and Communication Engineering student exploring Artificial Intelligence, embedded systems, and futuristic UI. I build smart systems and interactive experiences combining hardware and software.</p>
 </div>
 </section>
 
-<!-- Projects -->
 <section id="projects" class="px-10 py-24">
 <h2 class="text-3xl text-center mb-10">Projects</h2>
 <div class="grid md:grid-cols-3 gap-8">
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold">Smart Home Automation</h3>
-<p class="text-gray-400">IoT-based home control system</p>
+<h3 class="font-bold">AI Smart Assistant</h3>
+<p class="text-gray-400">Voice-controlled AI system</p>
 </div>
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold">Line Follower Robot</h3>
-<p class="text-gray-400">Autonomous robot using sensors</p>
+<h3 class="font-bold">IoT Monitoring System</h3>
+<p class="text-gray-400">Sensor data + cloud dashboard</p>
 </div>
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold">Electronics Portfolio</h3>
-<p class="text-gray-400">Personal portfolio website</p>
+<h3 class="font-bold">Robotics Project</h3>
+<p class="text-gray-400">Autonomous intelligent robot</p>
 </div>
 </div>
 </section>
 
-<!-- Contact -->
 <section id="contact" class="px-10 py-24 text-center">
 <h2 class="text-3xl mb-4">Contact</h2>
 <p class="text-gray-400">your-email@example.com</p>
@@ -100,28 +98,59 @@ let i=0;
 function type(){if(i<text.length){document.getElementById("typing").innerHTML+=text.charAt(i);i++;setTimeout(type,80)}}
 type();
 
-// Create orbs
-function createOrbs(){for(let i=0;i<5;i++){let orb=document.createElement('div');orb.className='orb';orb.style.left=Math.random()*100+'vw';orb.style.top=Math.random()*100+'vh';orb.style.animationDelay=(Math.random()*10)+'s';document.body.appendChild(orb);}}
-createOrbs();
-
-// Cursor trail
-const canvas=document.getElementById('cursorCanvas');
+// AI Neural Background
+const canvas=document.getElementById('bgCanvas');
 const ctx=canvas.getContext('2d');
-let particles=[];
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
-class Particle{
-constructor(x,y){this.x=x;this.y=y;this.size=Math.random()*4+1;this.speedX=Math.random()*2-1;this.speedY=Math.random()*2-1;this.color='rgba(0,242,255,0.6)'}
-update(){this.x+=this.speedX;this.y+=this.speedY;if(this.size>0.1)this.size-=0.1}
-draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
+let particles=[];
+for(let i=0;i<80;i++){
+ particles.push({
+  x:Math.random()*canvas.width,
+  y:Math.random()*canvas.height,
+  vx:Math.random()*0.5-0.25,
+  vy:Math.random()*0.5-0.25
+ });
+}
 
-window.addEventListener('mousemove',(e)=>{for(let i=0;i<5;i++){particles.push(new Particle(e.clientX,e.clientY))}});
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ 
+ for(let i=0;i<particles.length;i++){
+  let p=particles[i];
+  p.x+=p.vx;
+  p.y+=p.vy;
 
-function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<particles.length;i++){particles[i].update();particles[i].draw();if(particles[i].size<=0.1){particles.splice(i,1);i--}}requestAnimationFrame(animate)}
+  if(p.x<0||p.x>canvas.width) p.vx*=-1;
+  if(p.y<0||p.y>canvas.height) p.vy*=-1;
+
+  ctx.fillStyle="#00f5ff";
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,2,0,Math.PI*2);
+  ctx.fill();
+
+  for(let j=i;j<particles.length;j++){
+   let dx=p.x-particles[j].x;
+   let dy=p.y-particles[j].y;
+   let dist=Math.sqrt(dx*dx+dy*dy);
+   if(dist<120){
+    ctx.strokeStyle="rgba(0,245,255,0.1)";
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+    ctx.lineTo(particles[j].x,particles[j].y);
+    ctx.stroke();
+   }
+  }
+ }
+ requestAnimationFrame(animate);
+}
 animate();
 
-window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight});
+window.addEventListener('resize',()=>{
+ canvas.width=window.innerWidth;
+ canvas.height=window.innerHeight;
+});
 </script>
 
 </body>

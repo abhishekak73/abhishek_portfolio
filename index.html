@@ -13,7 +13,6 @@ body{
   color:white;
   font-family:sans-serif;
   overflow-x:hidden;
-  cursor:none;
 }
 
 /* Logo */
@@ -184,19 +183,15 @@ function animateBg(){
 }
 animateBg();
 
-// ===== INFRARED GAMING CURSOR =====
+// ===== NORMAL CURSOR + SPARK TRAIL =====
 const cursorCanvas=document.getElementById('cursorCanvas');
 const ctx=cursorCanvas.getContext('2d');
 
 cursorCanvas.width=window.innerWidth;
 cursorCanvas.height=window.innerHeight;
 
-let mouseX=window.innerWidth/2;
-let mouseY=window.innerHeight/2;
-
-let currentX=mouseX;
-let currentY=mouseY;
-
+let mouseX=0;
+let mouseY=0;
 let sparks=[];
 
 document.addEventListener('mousemove',(e)=>{
@@ -205,47 +200,18 @@ document.addEventListener('mousemove',(e)=>{
 
  for(let i=0;i<2;i++){
   sparks.push({
-   x:currentX,
-   y:currentY,
-   vx:(Math.random()-0.5)*2,
-   vy:(Math.random()-0.5)*2,
+   x:mouseX,
+   y:mouseY,
+   vx:(Math.random()-0.5)*1.5,
+   vy:(Math.random()-0.5)*1.5,
    life:1,
-   size:Math.random()*1.5+0.5
+   size:Math.random()*2
   });
  }
 });
 
-function drawCursor(x,y){
- ctx.save();
- ctx.translate(x,y);
-
- ctx.shadowColor="red";
- ctx.shadowBlur=20;
-
- ctx.beginPath();
- ctx.moveTo(0,0);
- ctx.lineTo(25,8);
- ctx.lineTo(8,25);
- ctx.closePath();
- ctx.fillStyle="#ff1a1a";
- ctx.fill();
-
- ctx.beginPath();
- ctx.moveTo(2,2);
- ctx.lineTo(18,7);
- ctx.lineTo(7,18);
- ctx.closePath();
- ctx.fillStyle="rgba(255,255,255,0.2)";
- ctx.fill();
-
- ctx.restore();
-}
-
 function animateCursor(){
  ctx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
-
- currentX+=(mouseX-currentX)*0.2;
- currentY+=(mouseY-currentY)*0.2;
 
  for(let i=sparks.length-1;i>=0;i--){
   let s=sparks[i];
@@ -258,12 +224,10 @@ function animateCursor(){
   }else{
    ctx.beginPath();
    ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
-   ctx.fillStyle=`rgba(255,50,50,${s.life})`;
+   ctx.fillStyle=`rgba(0,245,255,${s.life})`;
    ctx.fill();
   }
  }
-
- drawCursor(currentX,currentY);
 
  requestAnimationFrame(animateCursor);
 }

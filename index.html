@@ -1,33 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhishek's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABHISHEK A K. | AI & Electronics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{margin:0;background:#01010a;color:white;font-family:sans-serif;overflow-x:hidden}
+
+
+in background increase 
+.logo{font-weight:bold;background:linear-gradient(90deg,#00f5ff,#8b5cf6,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Neural network lines */
+canvas#bgCanvas{
+ position:fixed;
+ top:0;left:0;
+ z-index:-1;
+}
+
+/* Cursor trail canvas */
+canvas#cursorCanvas{
+ position:fixed;
+ top:0;left:0;
+ pointer-events:none;
+ z-index:9999;
+}
+
+/* Glass */
+.glass{
+ background:rgba(255,255,255,0.05);
+ backdrop-filter:blur(20px);
+ border:1px solid rgba(255,255,255,0.1);
+}
+
+/* Glow */
+.glow{
+ box-shadow:0 0 20px #00f5ff;
+ transition:all 0.3s ease;
+}
+
+.glow:hover{
+ box-shadow:0 0 40px #00f5ff, 0 0 80px #8b5cf6;
+ transform:scale(1.05);
+}
+
+/* Button */
+.btn{
+ background:linear-gradient(90deg,#00f5ff,#8b5cf6);
+ padding:12px 24px;
+ border-radius:10px;
+ cursor:pointer;
+ border:none;
+ color:white;
+ font-weight:bold;
+ text-decoration:none;
+ display:inline-block;
+}
+
+</style>
 </head>
+
 <body>
-    <header>
-        <h1>Welcome to My Portfolio</h1>
-    </header>
-    <section id="about">
-        <h2>About Me</h2>
-        <p>I am a web developer with a passion for creating beautiful and functional websites. With experience in various technologies, I strive to bring designs to life and make them user-friendly.</p>
-    </section>
-    <section id="contact">
-        <h2>Contact Me</h2>
-        <form action="mailto:youremail@example.com" method="post" enctype="text/plain">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="youremail@example.com" required>
-            <input type="submit" value="Submit">
-        </form>
-        <button onclick="location.href='mailto:youremail@example.com'">Email Me</button>
-        <button onclick="location.href='https://linkedin.com/in/yourprofile'">LinkedIn Profile</button>
-    </section>
-    <footer>
-        <p>&copy; 2026 Abhishek. All rights reserved.</p>
-    </footer>
+
+<!-- Background AI canvas -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- Cursor trail canvas -->
+<canvas id="cursorCanvas"></canvas>
+
+<!-- Header Navigation -->
+<header class="flex justify-between items-center p-6 glass fixed w-full z-50">
+<h1 class="logo">ABHISHEK A K.</h1>
+<nav class="space-x-6">
+<a href="#about" class="hover:text-cyan-400 transition">About</a>
+<a href="#projects" class="hover:text-cyan-400 transition">Projects</a>
+<a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+</nav>
+</header>
+
+<!-- Hero Section -->
+<section class="h-screen flex flex-col justify-center items-center text-center pt-20">
+<h2 id="typing" class="text-6xl font-bold mb-4"></h2>
+<p class="text-gray-400 text-xl">AI • Electronics • Future Tech</p>
+<div class="mt-6">
+<a href="#projects" class="btn glow">Explore Projects</a>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="px-10 py-24">
+<div class="glass p-8 rounded-xl max-w-3xl mx-auto">
+<h2 class="text-3xl mb-4">About Me</h2>
+<p class="text-gray-400">I am an Electronics and Communication Engineering student exploring Artificial Intelligence, embedded systems, and futuristic UI. I build smart systems and interactive experiences combining hardware and software innovation.</p>
+</div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="px-10 py-24">
+<h2 class="text-3xl text-center mb-10">Projects</h2>
+<div class="grid md:grid-cols-3 gap-8 px-10">
+<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<h3 class="font-bold text-cyan-400">AI Smart Assistant</h3>
+<p class="text-gray-400">Voice-controlled AI system with natural language processing</p>
+</div>
+<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<h3 class="font-bold text-cyan-400">IoT Monitoring System</h3>
+<p class="text-gray-400">Real-time sensor data + cloud dashboard integration</p>
+</div>
+<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<h3 class="font-bold text-cyan-400">Robotics Project</h3>
+<p class="text-gray-400">Autonomous intelligent robot with computer vision</p>
+</div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="px-10 py-24 text-center">
+<h2 class="text-3xl mb-4">Contact Me</h2>
+<p class="text-gray-400 mb-4">your-email@example.com</p>
+<div class="space-x-4">
+<a href="#" class="btn glow">Email</a>
+<a href="#" class="btn glow">LinkedIn</a>
+<a href="#" class="btn glow">GitHub</a>
+</div>
+</section>
+
+<script>
+// ============== TYPING ANIMATION ============== 
+const text="ABHISHEK A K.";
+let i=0;
+function type(){
+ if(i<text.length){
+  document.getElementById("typing").innerHTML+=text.charAt(i);
+  i++;
+  setTimeout(type,80);
+ }
+}
+type();
+
+// ============== AI NEURAL BACKGROUND ANIMATION ============== 
+const bgCanvas=document.getElementById('bgCanvas');
+const bgCtx=bgCanvas.getContext('2d');
+bgCanvas.width=window.innerWidth;
+bgCanvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+ particles.push({
+  x:Math.random()*bgCanvas.width,
+  y:Math.random()*bgCanvas.height,
+  vx:Math.random()*0.5-0.25,
+  vy:Math.random()*0.5-0.25
+ });
+}
+
+function animateBg(){
+ bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+ 
+ for(let i=0;i<particles.length;i++){
+  let p=particles[i];
+  p.x+=p.vx;
+  p.y+=p.vy;
+
+  if(p.x<0||p.x>bgCanvas.width) p.vx*=-1;
+  if(p.y<0||p.y>bgCanvas.height) p.vy*=-1;
+
+  bgCtx.fillStyle="#00f5ff";
+  bgCtx.beginPath();
+  bgCtx.arc(p.x,p.y,2,0,Math.PI*2);
+  bgCtx.fill();
+
+  for(let j=i;j<particles.length;j++){
+   let dx=p.x-particles[j].x;
+   let dy=p.y-particles[j].y;
+   let dist=Math.sqrt(dx*dx+dy*dy);
+   if(dist<120){
+    bgCtx.strokeStyle="rgba(0,245,255,0.1)";
+    bgCtx.beginPath();
+    bgCtx.moveTo(p.x,p.y);
+    bgCtx.lineTo(particles[j].x,particles[j].y);
+    bgCtx.stroke();
+   }
+  }
+ }
+ requestAnimationFrame(animateBg);
+}
+animateBg();
+
+// ============== CURSOR TRAIL ANIMATION ============== 
+const cursorCanvas=document.getElementById('cursorCanvas');
+const cursorCtx=cursorCanvas.getContext('2d');
+cursorCanvas.width=window.innerWidth;
+cursorCanvas.height=window.innerHeight;
+
+let mouseX=0, mouseY=0;
+let trailParticles=[];
+
+document.addEventListener('mousemove',(e)=>{
+ mouseX=e.clientX;
+ mouseY=e.clientY;
+ 
+ // Create trail particles
+ for(let i=0;i<2;i++){
+  trailParticles.push({
+   x:mouseX,
+   y:mouseY,
+   life:1,
+   vx:(Math.random()-0.5)*2,
+   vy:(Math.random()-0.5)*2,
+   size:Math.random()*4+2
+  });
+ }
+});
+
+function animateCursor(){
+ cursorCtx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
+ 
+ // Draw cursor glow
+ cursorCtx.fillStyle="rgba(0,245,255,0.4)";
+ cursorCtx.beginPath();
+ cursorCtx.arc(mouseX,mouseY,15,0,Math.PI*2);
+ cursorCtx.fill();
+ 
+ cursorCtx.fillStyle="rgba(139,92,246,0.3)";
+ cursorCtx.beginPath();
+ cursorCtx.arc(mouseX,mouseY,8,0,Math.PI*2);
+ cursorCtx.fill();
+ 
+ // Draw center dot
+ cursorCtx.fillStyle="#00f5ff";
+ cursorCtx.beginPath();
+ cursorCtx.arc(mouseX,mouseY,3,0,Math.PI*2);
+ cursorCtx.fill();
+ 
+ // Update and draw trail particles
+ for(let i=trailParticles.length-1;i>=0;i--){
+  let p=trailParticles[i];
+  p.life-=0.02;
+  p.x+=p.vx;
+  p.y+=p.vy;
+  p.vy+=0.1; // gravity effect
+  
+  if(p.life<=0){
+   trailParticles.splice(i,1);
+  } else {
+   cursorCtx.fillStyle=`rgba(0,245,255,${p.life*0.6})`;
+   cursorCtx.beginPath();
+   cursorCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
+   cursorCtx.fill();
+  }
+ }
+ 
+ requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// ============== WINDOW RESIZE HANDLER ============== 
+window.addEventListener('resize',()=>{
+ bgCanvas.width=window.innerWidth;
+bgCanvas.height=window.innerHeight;
+cursorCanvas.width=window.innerWidth;
+cursorCanvas.height=window.innerHeight;
+});
+
+</script>
+
 </body>
 </html>

@@ -19,7 +19,7 @@ body{
 /* Logo */
 .logo{
   font-weight:bold;
-  background:linear-gradient(90deg,#00f5ff,#8b5cf6,#22c55e);
+  background:linear-gradient(90deg,#ff1a1a,#ff4d4d,#ff0000);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -42,17 +42,17 @@ body{
  background:rgba(255,255,255,0.05);
  backdrop-filter:blur(20px);
  border:1px solid rgba(255,255,255,0.1);
- box-shadow:0 0 20px rgba(0,245,255,0.15);
+ box-shadow:0 0 20px rgba(255,0,0,0.15);
  transition:all 0.4s ease;
 }
 .glass:hover{
- box-shadow:0 0 30px #00f5ff, 0 0 60px #8b5cf6;
+ box-shadow:0 0 30px red, 0 0 60px darkred;
  transform:translateY(-5px) scale(1.02);
 }
 
 /* Button */
 .btn{
- background:linear-gradient(90deg,#00f5ff,#8b5cf6);
+ background:linear-gradient(90deg,#ff1a1a,#ff4d4d);
  padding:12px 24px;
  border-radius:10px;
  color:white;
@@ -62,7 +62,7 @@ body{
  transition:all 0.3s ease;
 }
 .btn:hover{
- box-shadow:0 0 40px #00f5ff, 0 0 80px #8b5cf6;
+ box-shadow:0 0 40px red, 0 0 80px darkred;
  transform:scale(1.05);
 }
 </style>
@@ -76,9 +76,9 @@ body{
 <header class="flex justify-between items-center p-6 glass fixed w-full z-50">
 <h1 class="logo">ABHISHEK A K.</h1>
 <nav class="space-x-6">
-<a href="#about" class="hover:text-cyan-400">About</a>
-<a href="#projects" class="hover:text-cyan-400">Projects</a>
-<a href="#contact" class="hover:text-cyan-400">Contact</a>
+<a href="#about" class="hover:text-red-400">About</a>
+<a href="#projects" class="hover:text-red-400">Projects</a>
+<a href="#contact" class="hover:text-red-400">Contact</a>
 </nav>
 </header>
 
@@ -103,15 +103,15 @@ I am an Electronics and Communication Engineering student exploring Artificial I
 <h2 class="text-3xl text-center mb-10">Projects</h2>
 <div class="grid md:grid-cols-3 gap-8 px-10">
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold text-cyan-400">AI Smart Assistant</h3>
+<h3 class="font-bold text-red-400">AI Smart Assistant</h3>
 <p class="text-gray-400">Voice-controlled AI system</p>
 </div>
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold text-cyan-400">IoT Monitoring System</h3>
+<h3 class="font-bold text-red-400">IoT Monitoring System</h3>
 <p class="text-gray-400">Sensor dashboard</p>
 </div>
 <div class="glass p-6 rounded-xl">
-<h3 class="font-bold text-cyan-400">Robotics Project</h3>
+<h3 class="font-bold text-red-400">Robotics Project</h3>
 <p class="text-gray-400">Autonomous robot</p>
 </div>
 </div>
@@ -162,7 +162,7 @@ function animateBg(){
   if(p.x<0||p.x>bgCanvas.width) p.vx*=-1;
   if(p.y<0||p.y>bgCanvas.height) p.vy*=-1;
 
-  bgCtx.fillStyle="rgba(0,245,255,0.9)";
+  bgCtx.fillStyle="rgba(255,0,0,0.8)";
   bgCtx.beginPath();
   bgCtx.arc(p.x,p.y,2,0,Math.PI*2);
   bgCtx.fill();
@@ -172,7 +172,7 @@ function animateBg(){
    let dy=p.y-particles[j].y;
    let dist=Math.sqrt(dx*dx+dy*dy);
    if(dist<120){
-    bgCtx.strokeStyle="rgba(0,245,255,0.1)";
+    bgCtx.strokeStyle="rgba(255,0,0,0.1)";
     bgCtx.beginPath();
     bgCtx.moveTo(p.x,p.y);
     bgCtx.lineTo(particles[j].x,particles[j].y);
@@ -184,7 +184,7 @@ function animateBg(){
 }
 animateBg();
 
-// ===== GAMING CURSOR =====
+// ===== INFRARED CURSOR =====
 const cursorCanvas=document.getElementById('cursorCanvas');
 const ctx=cursorCanvas.getContext('2d');
 
@@ -194,6 +194,9 @@ cursorCanvas.height=window.innerHeight;
 let mouseX=window.innerWidth/2;
 let mouseY=window.innerHeight/2;
 
+let currentX=mouseX;
+let currentY=mouseY;
+
 let sparks=[];
 
 document.addEventListener('mousemove',(e)=>{
@@ -202,47 +205,65 @@ document.addEventListener('mousemove',(e)=>{
 
  for(let i=0;i<2;i++){
   sparks.push({
-   x:mouseX,
-   y:mouseY,
-   vx:(Math.random()-0.5)*1.5,
-   vy:(Math.random()-0.5)*1.5,
+   x:currentX,
+   y:currentY,
+   vx:(Math.random()-0.5)*2,
+   vy:(Math.random()-0.5)*2,
    life:1,
-   size:Math.random()*2+0.5
+   size:Math.random()*1.5+0.5
   });
  }
 });
 
-function animateCursor(){
- ctx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
+function drawCursor(x,y){
+ ctx.save();
+ ctx.translate(x,y);
 
- // main cursor
+ ctx.shadowColor="red";
+ ctx.shadowBlur=20;
+
  ctx.beginPath();
- ctx.arc(mouseX,mouseY,3,0,Math.PI*2);
- ctx.fillStyle="#00f5ff";
+ ctx.moveTo(0,0);
+ ctx.lineTo(25,8);
+ ctx.lineTo(8,25);
+ ctx.closePath();
+ ctx.fillStyle="#ff1a1a";
  ctx.fill();
 
  ctx.beginPath();
- ctx.arc(mouseX,mouseY,10,0,Math.PI*2);
- ctx.strokeStyle="rgba(0,245,255,0.6)";
- ctx.lineWidth=1;
- ctx.stroke();
+ ctx.moveTo(2,2);
+ ctx.lineTo(18,7);
+ ctx.lineTo(7,18);
+ ctx.closePath();
+ ctx.fillStyle="rgba(255,255,255,0.2)";
+ ctx.fill();
 
- // sparks
+ ctx.restore();
+}
+
+function animateCursor(){
+ ctx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
+
+ currentX+=(mouseX-currentX)*0.2;
+ currentY+=(mouseY-currentY)*0.2;
+
  for(let i=sparks.length-1;i>=0;i--){
   let s=sparks[i];
   s.x+=s.vx;
   s.y+=s.vy;
-  s.life-=0.03;
+  s.life-=0.04;
 
   if(s.life<=0){
    sparks.splice(i,1);
   }else{
    ctx.beginPath();
    ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
-   ctx.fillStyle=`rgba(0,245,255,${s.life})`;
+   ctx.fillStyle=`rgba(255,50,50,${s.life})`;
    ctx.fill();
   }
  }
+
+ drawCursor(currentX,currentY);
 
  requestAnimationFrame(animateCursor);
 }

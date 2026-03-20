@@ -161,9 +161,10 @@ function animateBg(){
   if(p.x<0||p.x>bgCanvas.width) p.vx*=-1;
   if(p.y<0||p.y>bgCanvas.height) p.vy*=-1;
 
+  // 🔥 Bigger dots here
   bgCtx.fillStyle="rgba(0,245,255,0.9)";
   bgCtx.beginPath();
-  bgCtx.arc(p.x,p.y,2,0,Math.PI*2);
+  bgCtx.arc(p.x,p.y,3.5,0,Math.PI*2); 
   bgCtx.fill();
 
   for(let j=i+1;j<particles.length;j++){
@@ -183,7 +184,7 @@ function animateBg(){
 }
 animateBg();
 
-// ===== SMOOTH TAIL CURSOR =====
+// ===== LIGHTNING CURSOR =====
 const cursorCanvas=document.getElementById('cursorCanvas');
 const ctx=cursorCanvas.getContext('2d');
 
@@ -191,7 +192,7 @@ cursorCanvas.width=window.innerWidth;
 cursorCanvas.height=window.innerHeight;
 
 let trail=[];
-const trailLength=25;
+const trailLength=20;
 
 for(let i=0;i<trailLength;i++){
  trail.push({x:0,y:0});
@@ -205,22 +206,25 @@ document.addEventListener('mousemove',(e)=>{
 function animateCursor(){
  ctx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
 
- // smooth trailing effect
  for(let i=1;i<trail.length;i++){
-  trail[i].x += (trail[i-1].x - trail[i].x)*0.25;
-  trail[i].y += (trail[i-1].y - trail[i].y)*0.25;
+  trail[i].x += (trail[i-1].x - trail[i].x)*0.4;
+  trail[i].y += (trail[i-1].y - trail[i].y)*0.4;
  }
 
- // draw tail
+ // ⚡ Lightning jagged lines
  for(let i=0;i<trail.length-1;i++){
   let p=trail[i];
   let next=trail[i+1];
 
+  let offsetX=(Math.random()-0.5)*6;
+  let offsetY=(Math.random()-0.5)*6;
+
   ctx.beginPath();
   ctx.moveTo(p.x,p.y);
-  ctx.lineTo(next.x,next.y);
+  ctx.lineTo(next.x+offsetX,next.y+offsetY);
+
   ctx.strokeStyle=`rgba(0,245,255,${1 - i/trail.length})`;
-  ctx.lineWidth=2;
+  ctx.lineWidth=2.5;
   ctx.stroke();
  }
 

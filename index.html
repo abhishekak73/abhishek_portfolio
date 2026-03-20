@@ -42,6 +42,13 @@ canvas#cursorCanvas{
  background:rgba(255,255,255,0.05);
  backdrop-filter:blur(20px);
  border:1px solid rgba(255,255,255,0.1);
+ box-shadow:0 0 20px #00f5ff;
+ transition:all 0.3s ease;
+}
+
+.glass:hover{
+ box-shadow:0 0 40px #00f5ff, 0 0 80px #8b5cf6;
+ transform:scale(1.05);
 }
 
 /* Glow */
@@ -66,6 +73,17 @@ canvas#cursorCanvas{
  text-decoration:none;
  display:inline-block;
 }
+
+@keyframes rotateRing1 {
+ from { transform: rotate(0deg); }
+ to { transform: rotate(360deg); }
+}
+
+@keyframes rotateRing2 {
+ from { transform: rotate(0deg); }
+ to { transform: rotate(-360deg); }
+}
+
 </style>
 </head>
 
@@ -185,7 +203,7 @@ function animateBg(){
 }
 animateBg();
 
-// ===== CURSOR =====
+// ===== CURSOR WITH ROTATING RINGS =====
 const cursorCanvas=document.getElementById('cursorCanvas');
 const cursorCtx=cursorCanvas.getContext('2d');
 cursorCanvas.width=window.innerWidth;
@@ -193,60 +211,62 @@ cursorCanvas.height=window.innerHeight;
 
 let mouseX=window.innerWidth/2;
 let mouseY=window.innerHeight/2;
-
-let trailParticles=[];
+let rotation=0;
 
 document.addEventListener('mousemove',(e)=>{
  mouseX=e.clientX;
  mouseY=e.clientY;
-
- for(let i=0;i<2;i++){
-  trailParticles.push({
-   x:mouseX,
-   y:mouseY,
-   life:1,
-   vx:(Math.random()-0.5)*2,
-   vy:(Math.random()-0.5)*2,
-   size:Math.random()*4+2
-  });
- }
 });
 
 function animateCursor(){
  cursorCtx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
+ 
+ rotation+=3;
 
- // glow
- cursorCtx.fillStyle="rgba(0,245,255,0.4)";
- cursorCtx.beginPath();
- cursorCtx.arc(mouseX,mouseY,15,0,Math.PI*2);
- cursorCtx.fill();
-
- cursorCtx.fillStyle="rgba(139,92,246,0.3)";
- cursorCtx.beginPath();
- cursorCtx.arc(mouseX,mouseY,8,0,Math.PI*2);
- cursorCtx.fill();
-
+ // Center dot
  cursorCtx.fillStyle="#00f5ff";
  cursorCtx.beginPath();
  cursorCtx.arc(mouseX,mouseY,3,0,Math.PI*2);
  cursorCtx.fill();
 
- for(let i=trailParticles.length-1;i>=0;i--){
-  let p=trailParticles[i];
-  p.life-=0.02;
-  p.x+=p.vx;
-  p.y+=p.vy;
-  p.vy+=0.1;
+ // Outer glow
+ cursorCtx.fillStyle="rgba(0,245,255,0.2)";
+ cursorCtx.beginPath();
+ cursorCtx.arc(mouseX,mouseY,20,0,Math.PI*2);
+ cursorCtx.fill();
 
-  if(p.life<=0){
-   trailParticles.splice(i,1);
-  } else {
-   cursorCtx.fillStyle=`rgba(0,245,255,${p.life*0.6})`;
-   cursorCtx.beginPath();
-   cursorCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
-   cursorCtx.fill();
-  }
- }
+ // Ring 1 - rotating clockwise
+ cursorCtx.save();
+ cursorCtx.translate(mouseX,mouseY);
+ cursorCtx.rotate(rotation*Math.PI/180);
+ cursorCtx.strokeStyle="rgba(0,245,255,0.6)";
+ cursorCtx.lineWidth=2;
+ cursorCtx.beginPath();
+ cursorCtx.arc(0,0,15,0,Math.PI*2);
+ cursorCtx.stroke();
+ cursorCtx.restore();
+
+ // Ring 2 - rotating counter-clockwise
+ cursorCtx.save();
+ cursorCtx.translate(mouseX,mouseY);
+ cursorCtx.rotate(-rotation*1.5*Math.PI/180);
+ cursorCtx.strokeStyle="rgba(139,92,246,0.5)";
+ cursorCtx.lineWidth=1.5;
+ cursorCtx.beginPath();
+ cursorCtx.arc(0,0,25,0,Math.PI*2);
+ cursorCtx.stroke();
+ cursorCtx.restore();
+
+ // Ring 3 - rotating clockwise faster
+ cursorCtx.save();
+ cursorCtx.translate(mouseX,mouseY);
+ cursorCtx.rotate(rotation*2*Math.PI/180);
+ cursorCtx.strokeStyle="rgba(34,197,94,0.4)";
+ cursorCtx.lineWidth=1;
+ cursorCtx.beginPath();
+ cursorCtx.arc(0,0,10,0,Math.PI*2);
+ cursorCtx.stroke();
+ cursorCtx.restore();
 
  requestAnimationFrame(animateCursor);
 }
@@ -255,9 +275,9 @@ animateCursor();
 // Resize
 window.addEventListener('resize',()=>{
  bgCanvas.width=window.innerWidth;
- bgCanvas.height=window.innerHeight;
- cursorCanvas.width=window.innerWidth;
- cursorCanvas.height=window.innerHeight;
+bgCanvas.height=window.innerHeight;
+cursorCanvas.width=window.innerWidth;
+cursorCanvas.height=window.innerHeight;
 });
 </script>
 

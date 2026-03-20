@@ -15,6 +15,7 @@ body{
   overflow-x:hidden;
 }
 
+/* Logo */
 .logo{
   font-weight:bold;
   background:linear-gradient(90deg,#00f5ff,#8b5cf6,#22c55e);
@@ -22,14 +23,12 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-/* Background Canvas */
+/* Canvas */
 canvas#bgCanvas{
  position:fixed;
  top:0;left:0;
  z-index:-1;
 }
-
-/* Cursor Canvas */
 canvas#cursorCanvas{
  position:fixed;
  top:0;left:0;
@@ -37,21 +36,17 @@ canvas#cursorCanvas{
  z-index:9999;
 }
 
-/* Glass */
+/* Glass Cards */
 .glass{
  background:rgba(255,255,255,0.05);
  backdrop-filter:blur(20px);
  border:1px solid rgba(255,255,255,0.1);
+ box-shadow:0 0 20px rgba(0,245,255,0.15);
+ transition:all 0.4s ease;
 }
-
-/* Glow */
-.glow{
- box-shadow:0 0 20px #00f5ff;
- transition:all 0.3s ease;
-}
-.glow:hover{
- box-shadow:0 0 40px #00f5ff, 0 0 80px #8b5cf6;
- transform:scale(1.05);
+.glass:hover{
+ box-shadow:0 0 30px #00f5ff, 0 0 60px #8b5cf6;
+ transform:translateY(-5px) scale(1.02);
 }
 
 /* Button */
@@ -59,13 +54,17 @@ canvas#cursorCanvas{
  background:linear-gradient(90deg,#00f5ff,#8b5cf6);
  padding:12px 24px;
  border-radius:10px;
- cursor:pointer;
- border:none;
  color:white;
  font-weight:bold;
  text-decoration:none;
  display:inline-block;
+ transition:all 0.3s ease;
 }
+.btn:hover{
+ box-shadow:0 0 40px #00f5ff, 0 0 80px #8b5cf6;
+ transform:scale(1.05);
+}
+
 </style>
 </head>
 
@@ -77,9 +76,9 @@ canvas#cursorCanvas{
 <header class="flex justify-between items-center p-6 glass fixed w-full z-50">
 <h1 class="logo">ABHISHEK A K.</h1>
 <nav class="space-x-6">
-<a href="#about" class="hover:text-cyan-400 transition">About</a>
-<a href="#projects" class="hover:text-cyan-400 transition">Projects</a>
-<a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+<a href="#about" class="hover:text-cyan-400">About</a>
+<a href="#projects" class="hover:text-cyan-400">Projects</a>
+<a href="#contact" class="hover:text-cyan-400">Contact</a>
 </nav>
 </header>
 
@@ -87,7 +86,7 @@ canvas#cursorCanvas{
 <h2 id="typing" class="text-6xl font-bold mb-4"></h2>
 <p class="text-gray-400 text-xl">AI • Electronics • Future Tech</p>
 <div class="mt-6">
-<a href="#projects" class="btn glow">Explore Projects</a>
+<a href="#projects" class="btn">Explore Projects</a>
 </div>
 </section>
 
@@ -103,15 +102,15 @@ I am an Electronics and Communication Engineering student exploring Artificial I
 <section id="projects" class="px-10 py-24">
 <h2 class="text-3xl text-center mb-10">Projects</h2>
 <div class="grid md:grid-cols-3 gap-8 px-10">
-<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<div class="glass p-6 rounded-xl">
 <h3 class="font-bold text-cyan-400">AI Smart Assistant</h3>
 <p class="text-gray-400">Voice-controlled AI system</p>
 </div>
-<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<div class="glass p-6 rounded-xl">
 <h3 class="font-bold text-cyan-400">IoT Monitoring System</h3>
 <p class="text-gray-400">Sensor dashboard</p>
 </div>
-<div class="glass p-6 rounded-xl hover:scale-105 transition-transform">
+<div class="glass p-6 rounded-xl">
 <h3 class="font-bold text-cyan-400">Robotics Project</h3>
 <p class="text-gray-400">Autonomous robot</p>
 </div>
@@ -136,7 +135,7 @@ function type(){
 }
 type();
 
-// ===== BACKGROUND AI =====
+// ===== AI BACKGROUND =====
 const bgCanvas=document.getElementById('bgCanvas');
 const bgCtx=bgCanvas.getContext('2d');
 bgCanvas.width=window.innerWidth;
@@ -185,68 +184,46 @@ function animateBg(){
 }
 animateBg();
 
-// ===== CURSOR =====
+// ===== ADVANCED CURSOR =====
 const cursorCanvas=document.getElementById('cursorCanvas');
 const cursorCtx=cursorCanvas.getContext('2d');
+
 cursorCanvas.width=window.innerWidth;
 cursorCanvas.height=window.innerHeight;
 
 let mouseX=window.innerWidth/2;
 let mouseY=window.innerHeight/2;
 
-let trailParticles=[];
+let trail=[];
+for(let i=0;i<20;i++){
+ trail.push({x:mouseX,y:mouseY});
+}
 
 document.addEventListener('mousemove',(e)=>{
  mouseX=e.clientX;
  mouseY=e.clientY;
-
- for(let i=0;i<2;i++){
-  trailParticles.push({
-   x:mouseX,
-   y:mouseY,
-   life:1,
-   vx:(Math.random()-0.5)*2,
-   vy:(Math.random()-0.5)*2,
-   size:Math.random()*4+2
-  });
- }
 });
 
 function animateCursor(){
  cursorCtx.clearRect(0,0,cursorCanvas.width,cursorCanvas.height);
 
- // glow
- cursorCtx.fillStyle="rgba(0,245,255,0.4)";
- cursorCtx.beginPath();
- cursorCtx.arc(mouseX,mouseY,15,0,Math.PI*2);
- cursorCtx.fill();
+ trail.forEach((p,i)=>{
+  let next=trail[i+1] || trail[0];
+  p.x += ((i===0?mouseX:next.x) - p.x) * 0.25;
+  p.y += ((i===0?mouseY:next.y) - p.y) * 0.25;
+ });
 
- cursorCtx.fillStyle="rgba(139,92,246,0.3)";
- cursorCtx.beginPath();
- cursorCtx.arc(mouseX,mouseY,8,0,Math.PI*2);
- cursorCtx.fill();
+ trail.forEach((p,i)=>{
+  cursorCtx.beginPath();
+  cursorCtx.arc(p.x,p.y,10*(1-i/trail.length),0,Math.PI*2);
+  cursorCtx.fillStyle=`rgba(0,245,255,${1-i/trail.length})`;
+  cursorCtx.fill();
+ });
 
+ cursorCtx.beginPath();
+ cursorCtx.arc(mouseX,mouseY,6,0,Math.PI*2);
  cursorCtx.fillStyle="#00f5ff";
- cursorCtx.beginPath();
- cursorCtx.arc(mouseX,mouseY,3,0,Math.PI*2);
  cursorCtx.fill();
-
- for(let i=trailParticles.length-1;i>=0;i--){
-  let p=trailParticles[i];
-  p.life-=0.02;
-  p.x+=p.vx;
-  p.y+=p.vy;
-  p.vy+=0.1;
-
-  if(p.life<=0){
-   trailParticles.splice(i,1);
-  } else {
-   cursorCtx.fillStyle=`rgba(0,245,255,${p.life*0.6})`;
-   cursorCtx.beginPath();
-   cursorCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
-   cursorCtx.fill();
-  }
- }
 
  requestAnimationFrame(animateCursor);
 }

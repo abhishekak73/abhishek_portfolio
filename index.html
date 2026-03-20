@@ -153,5 +153,16 @@ window.addEventListener('resize',()=>{
 });
 </script>
 
+ <body>
+
+<!-- Background AI canvas -->
+<canvas id="bgCanvas" style="position: fixed; top:0; left:0; z-index:-1;"></canvas>
+
+<!-- Cursor trail canvas -->
+<canvas id="cursorCanvas" style="position: fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
+
+<!-- Your website content below -->
+<header>...</header>
+<section>...</section>
 </body>
 </html>

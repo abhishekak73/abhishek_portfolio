@@ -1,42 +1,47 @@
 :root {
     --bg-color: #0a0a0c;
     --card-bg: rgba(255, 255, 255, 0.05);
-    --accent-color: #00f2ff; /* Neon Blue */
+    --accent-color: #00f2ff;
     --text-color: #e0e0e0;
+    
+    /* Glassmorphism properties */
+    --glass-backdrop: blur(12px);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-radius: 15px;
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    margin: 0;
-    overflow-x: hidden;
-    perspective: 1000px; /* Enables 3D space */
-}
-
-/* Glassmorphism for Header and Cards */
-header, .project-card, section {
+/* Define glassmorphism as a shared base */
+.glass-effect {
     background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--glass-backdrop);
+    border: var(--glass-border);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow);
 }
 
-/* 3D Tilt Effect on Hover */
+header {
+    @extend .glass-effect; /* or add the class to HTML */
+}
+
+.project-card {
+    @extend .glass-effect;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+section {
+    @extend .glass-effect;
+}
 .project-card:hover {
-    transform: translateY(-10px) rotateX(5deg) rotateY(5deg) translateZ(20px);
+    transform: translateY(-10px); /* Single transform is more performant */
     border-color: var(--accent-color);
     box-shadow: 0 20px 40px rgba(0, 242, 255, 0.2);
 }
 
-/* Glowing text for your Name */
-h1 {
-    text-shadow: 0 0 15px var(--accent-color);
-    color: #fff;
+/* If you want 3D, use it sparingly and only when needed */
+.project-card {
+    will-change: transform; /* Hint to browser for optimization */
 }
-
-/* Background Floating Lights (The Orbs) */
 .orb {
     position: fixed;
     width: 150px;
@@ -50,5 +55,5 @@ h1 {
 
 @keyframes float {
     from { transform: translate(0, 0); }
-    to { transform: translate(100vw, 100vh); }
+    to { transform: translate(calc(100vw - 150px), calc(100vh - 150px)); } /* Prevents overflow */
 }

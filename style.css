@@ -61,3 +61,10 @@ section {
     from { transform: translate(0, 0); }
     to { transform: translate(calc(100vw - 150px), calc(100vh - 150px)); } /* Prevents overflow */
 }
+#cursorCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+}

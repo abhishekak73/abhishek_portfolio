@@ -21,7 +21,11 @@
 }
 
 header {
-    @extend .glass-effect; /* or add the class to HTML */
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-backdrop);
+    border: var(--glass-border);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow);
 }
 
 .project-card {
